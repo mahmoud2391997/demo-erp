@@ -1,0 +1,127 @@
+{
+  "entities": {
+    "Employee": {
+      "title": "Employee",
+      "description": "Central database of employees.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name of the employee." },
+        "email": { "type": "string", "format": "email", "description": "Work email address." },
+        "role": { "type": "string", "description": "Job title or role." },
+        "salary": { "type": "number", "description": "Basic salary." },
+        "joiningDate": { "type": "string", "format": "date", "description": "Date the employee joined." },
+        "passport": { "type": "string", "description": "Passport number." },
+        "visa": { "type": "string", "description": "Visa status/number." },
+        "emiratesId": { "type": "string", "description": "Emirates ID number." }
+      },
+      "required": ["name", "email", "role", "salary", "joiningDate"]
+    },
+    "Payroll": {
+      "title": "Payroll",
+      "description": "Payroll records for employees.",
+      "type": "object",
+      "properties": {
+        "employeeId": { "type": "string", "description": "Reference to the employee." },
+        "amount": { "type": "number", "description": "Total amount paid." },
+        "payCycle": { "type": "string", "enum": ["Monthly", "Bi-Weekly", "Weekly"], "description": "Pay cycle frequency." },
+        "date": { "type": "string", "format": "date", "description": "Date of payment." },
+        "overtime": { "type": "number", "description": "Overtime pay." },
+        "allowances": { "type": "number", "description": "Allowances." },
+        "deductions": { "type": "number", "description": "Deductions." }
+      },
+      "required": ["employeeId", "amount", "payCycle", "date"]
+    },
+    "Performance": {
+      "title": "Performance Evaluation",
+      "description": "Employee performance reviews and KPIs.",
+      "type": "object",
+      "properties": {
+        "employeeId": { "type": "string", "description": "Reference to the employee." },
+        "feedback": { "type": "string", "description": "Manager feedback." },
+        "kpiScore": { "type": "number", "description": "KPI score (0-100)." },
+        "date": { "type": "string", "format": "date", "description": "Evaluation date." },
+        "managerId": { "type": "string", "description": "ID of the evaluating manager." }
+      },
+      "required": ["employeeId", "feedback", "kpiScore", "date"]
+    },
+    "InventoryItem": {
+      "title": "Inventory Item",
+      "description": "Stock items in the inventory.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Item name." },
+        "sku": { "type": "string", "description": "Stock Keeping Unit." },
+        "stockQuantity": { "type": "number", "description": "Current stock level." },
+        "unitPrice": { "type": "number", "description": "Price per unit." },
+        "supplierId": { "type": "string", "description": "Primary supplier ID." },
+        "lowStockThreshold": { "type": "number", "description": "Alert threshold for low stock." }
+      },
+      "required": ["name", "sku", "stockQuantity", "unitPrice"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Material and service providers.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Supplier company name." },
+        "contactName": { "type": "string", "description": "Primary contact person." },
+        "email": { "type": "string", "format": "email", "description": "Contact email." },
+        "phone": { "type": "string", "description": "Contact phone." },
+        "materialList": { "type": "array", "items": { "type": "string" }, "description": "List of materials supplied." }
+      },
+      "required": ["name", "email"]
+    },
+    "InventoryOrder": {
+      "title": "Inventory Order",
+      "description": "Stock movement records (In/Out).",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["Stock In", "Stock Out"], "description": "Order type." },
+        "itemId": { "type": "string", "description": "Reference to the inventory item." },
+        "quantity": { "type": "number", "description": "Quantity moved." },
+        "date": { "type": "string", "format": "date", "description": "Transaction date." },
+        "supplierId": { "type": "string", "description": "Supplier ID (for Stock In)." },
+        "notes": { "type": "string", "description": "Additional notes." }
+      },
+      "required": ["type", "itemId", "quantity", "date"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Sales leads and prospects.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Lead contact name." },
+        "company": { "type": "string", "description": "Company name." },
+        "status": { "type": "string", "enum": ["New", "Contacted", "Quotation Sent", "Negotiation", "Won", "Lost"], "description": "Current stage in the sales funnel." },
+        "value": { "type": "number", "description": "Estimated deal value." },
+        "source": { "type": "string", "description": "Lead source (e.g., Website, Referral)." },
+        "email": { "type": "string", "format": "email", "description": "Contact email." }
+      },
+      "required": ["name", "status"]
+    },
+    "Campaign": {
+      "title": "Marketing Campaign",
+      "description": "Marketing initiatives and analytics.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Campaign name." },
+        "budget": { "type": "number", "description": "Allocated budget." },
+        "leadsGenerated": { "type": "number", "description": "Number of leads generated." },
+        "revenueGenerated": { "type": "number", "description": "Revenue attributed to campaign." },
+        "startDate": { "type": "string", "format": "date", "description": "Campaign start date." },
+        "endDate": { "type": "string", "format": "date", "description": "Campaign end date." }
+      },
+      "required": ["name", "budget", "startDate"]
+    }
+  },
+  "firestore": {
+    "/employees": { "schema": "Employee", "description": "Collection of employee records." },
+    "/payroll": { "schema": "Payroll", "description": "Collection of payroll transactions." },
+    "/performance": { "schema": "Performance", "description": "Collection of performance evaluations." },
+    "/inventory": { "schema": "InventoryItem", "description": "Collection of inventory items." },
+    "/suppliers": { "schema": "Supplier", "description": "Collection of suppliers." },
+    "/inventory_orders": { "schema": "InventoryOrder", "description": "Collection of stock movement records." },
+    "/leads": { "schema": "Lead", "description": "Collection of sales leads." },
+    "/campaigns": { "schema": "Campaign", "description": "Collection of marketing campaigns." }
+  }
+}
